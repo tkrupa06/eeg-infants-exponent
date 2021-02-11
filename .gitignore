@@ -136,3 +136,5 @@ dmypy.json
 
 # Custom
 /data
+/results
+/working

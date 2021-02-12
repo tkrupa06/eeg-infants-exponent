@@ -27,6 +27,7 @@ os.makedirs(epochs_folder, exist_ok=True)
 for subject in df.subject_id:
 
     npy_file_name = "%s/%s_epochsmat.npy" % (epochs_folder, subject)
+    chname_file_name = "%s/%s_channels.npy" % (epochs_folder, subject)
     mat_file_name = "%s/%s_epochsmat.mat" % (epochs_folder, subject)
     ica_file_name = "%s/%s_raw.fif" % (raw_folder, subject)
 
@@ -48,16 +49,16 @@ for subject in df.subject_id:
     # check segments for NaNs, should be automatically rejected by mne.Epochs
     assert np.sum(np.isnan(epochs.get_data())) == 0
 
-    # convert epochs to datarame
-    dfg = epochs.to_data_frame().groupby("epoch")
-
-    # convert grouped dataframe to 3d matrix
-    arr3d = np.stack([x[1].loc[:, epochs.ch_names].values for x in dfg])
+    # convert epochs to 3d matrix
+    arr3d = epochs.get_data()
 
     # save as numpy array
     np.save(npy_file_name, arr3d)
+    np.save(chname_file_name, epochs.ch_names)
 
-    # save as mat file
-    savemat(mat_file_name, {"subject": subject, "data": arr3d})
+    # save as mat filej
+    savemat(
+        mat_file_name, {"subject": subject, "data": arr3d, "channels": epochs.ch_names}
+    )
 
     print("done!")

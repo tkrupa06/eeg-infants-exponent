@@ -50,7 +50,7 @@ for subject in df.subject_id:
     assert np.sum(np.isnan(epochs.get_data())) == 0
 
     # convert epochs to 3d matrix
-    arr3d = epochs.get_data()
+    arr3d = epochs.get_data()  # Dimensions: (n_epochs, n_channels, n_times)
 
     # save as numpy array
     np.save(npy_file_name, arr3d)

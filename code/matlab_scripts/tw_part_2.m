@@ -12,7 +12,7 @@
 % --------------------------------------------------------------------------------------
 %
 % Single subject EEG data processing using EEGLAB
-%   Part 1 - IO and basic cleaning
+%   Part 2 - Artefact reduction and filtering
 %
 % Instructions:
 %   1. Use EEGLAB GUI to execute commands
@@ -25,43 +25,47 @@
 %
 % --------------------------------------------------------------------------------------
 
-% Step 0: Clear environment and initialize path to .BDF data file
+% Step 0: Clear environment and initialize path to .set file
 
 
 % Step 1: Launch EEGLAB
 
 
-% Step 2: Read .BDF file using the BIOSIG interface - only the first 32 channels
-%   add subject identifier as file name
+% Step 2: Read .set file
 
 
-% Step 3: Update dataset comments with datetime stamp and relevant metadata
+% Step 3: Clean data using ASR with the following parameters
+%   Remove channel drift
+%        Linear filter transition band = [0.25, 0.75] 
+%   Remove bad channels
+%       channel flat for more than 5 seconds
+%       maximum std of high frequency noise = 5
+%       minimum correlation with nearby channels = 0.6
+%   Perform ASR bad burst correction
+%       maximum std of windows = 20
+%       use Euclidean distance metric
+%       don't remove bad data epochs, instead correct them
+%   Additional removal of bad data periods = off
 
 
-% Step 4: Fix channel labels
-chan_names = split({EEG.chanlocs.labels}, "-"); % Split string based on hyphen
-chan_names = squeeze(chan_names(:, :, 2)); % Take the right segments of the split
-[EEG.chanlocs.labels] = chan_names{:}; % Assign to struct field
-
-% Step 5: Update dataset comments decsribing step 4
+% Step 4: Update dataset comments with datetime stamp and details of step 3
 
 
-% Step 6: Add channel locations using default BESA 10-5 location file
+% Step 5: Spherical interpolation of removed channels using stored copy of channel locs
 
 
-% Step 7: Update dataset comments decsribing step 6
+% Step 6: Update dataset comments with details of step 5
 
 
-% Step 8: Make a copy of channel locations and store separately inside EEG struct
-%   This will be useful later on for interpolation
+% Step 7: Bandpass FIR filter 2-40Hz without plotting frequency response
 
 
-% Step 9: Update dataset comments decsribing step 8
+% Step 8: Update dataset comments with details of step 7
 
 
-% Step 10: Save data as EEGLAB .set file
+% Step 9: Save .set file with new filename with ASR_FIR appended
 
 
-% Step 11: Redraw EEGLAB GUI
+% Step 10: Redraw EEGLAB GUI
 
 

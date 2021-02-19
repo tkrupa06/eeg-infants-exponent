@@ -33,8 +33,6 @@
 
 % Step 2: Read .BDF file using the BIOSIG interface - only the first 32 channels
 %   add subject identifier as file name
-
-
 % Step 3: Update dataset comments with datetime stamp and relevant metadata
 
 
